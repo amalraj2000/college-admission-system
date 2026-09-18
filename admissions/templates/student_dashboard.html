@@ -9,81 +9,81 @@
     </div>
 
     {% if not application %}
-        <div class="col-md-12 text-center mt-5">
-            <div class="card p-5">
-                <h4>Welcome to Providence Womens Clg Calicut</h4>
-                <p class="text-muted">You have not submitted an application yet.</p>
-                <a href="{% url 'apply' %}" class="btn btn-primary btn-lg mt-3">Start Application</a>
-            </div>
+    <div class="col-md-12 text-center mt-5">
+        <div class="card p-5">
+            <h4>Welcome to Providence Womens College Calicut</h4>
+            <p class="text-muted">You have not submitted an application yet.</p>
+            <a href="{% url 'apply' %}" class="btn btn-primary btn-lg mt-3">Start Application</a>
         </div>
+    </div>
     {% else %}
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Application Details</h5>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Application Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-4 fw-bold">Application ID:</div>
+                    <div class="col-sm-8">{{ application.id }}</div>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Application ID:</div>
-                        <div class="col-sm-8">{{ application.id }}</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Full Name:</div>
-                        <div class="col-sm-8">{{ application.full_name }}</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Course Applied:</div>
-                        <div class="col-sm-8">{{ application.course.name }}</div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Status:</div>
-                        <div class="col-sm-8">
-                            <span class="badge 
+                <div class="row mb-2">
+                    <div class="col-sm-4 fw-bold">Full Name:</div>
+                    <div class="col-sm-8">{{ application.full_name }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 fw-bold">Course Applied:</div>
+                    <div class="col-sm-8">{{ application.course.name }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 fw-bold">Status:</div>
+                    <div class="col-sm-8">
+                        <span class="badge 
                                 {% if application.status == 'Pending' %}bg-warning
                                 {% elif application.status == 'Documents Verified' %}bg-info
                                 {% elif application.status == 'Merit Approved' %}bg-primary
                                 {% elif application.status == 'Paid' or application.status == 'Admitted' %}bg-success
                                 {% else %}bg-danger{% endif %}">
-                                {{ application.status }}
-                            </span>
-                        </div>
+                            {{ application.status }}
+                        </span>
                     </div>
-                    <div class="row mb-2">
-                        <div class="col-sm-4 fw-bold">Submitted At:</div>
-                        <div class="col-sm-8">{{ application.submitted_at|date:"F d, Y" }}</div>
-                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-4 fw-bold">Submitted At:</div>
+                    <div class="col-sm-8">{{ application.submitted_at|date:"F d, Y" }}</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Actions Required</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        {% if not document %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Upload Documents
-                                <a href="{% url 'upload_documents' %}" class="btn btn-sm btn-primary">Upload</a>
-                            </li>
-                        {% else %}
-                            <li class="list-group-item text-success"><i class="bi bi-check-circle"></i> Documents Uploaded</li>
-                        {% endif %}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Actions Required</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% if not document %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Upload Documents
+                        <a href="{% url 'upload_documents' %}" class="btn btn-sm btn-primary">Upload</a>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item text-success"><i class="bi bi-check-circle"></i> Documents Uploaded</li>
+                    {% endif %}
 
-                        {% if application.status == 'Merit Approved' or application.status == 'Documents Verified' %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                Pay Admission Fee
-                                <a href="{% url 'pay_fees' %}" class="btn btn-sm btn-success">Pay Fee</a>
-                            </li>
-                        {% elif application.status == 'Paid' or application.status == 'Admitted' %}
-                            <li class="list-group-item text-success"><i class="bi bi-check-circle"></i> Fees Paid</li>
-                        {% endif %}
-                    </ul>
-                </div>
+                    {% if application.status == 'Merit Approved' or application.status == 'Documents Verified' %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Pay Admission Fee
+                        <a href="{% url 'pay_fees' %}" class="btn btn-sm btn-success">Pay Fee</a>
+                    </li>
+                    {% elif application.status == 'Paid' or application.status == 'Admitted' %}
+                    <li class="list-group-item text-success"><i class="bi bi-check-circle"></i> Fees Paid</li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
+    </div>
     {% endif %}
 </div>
 {% endblock %}
