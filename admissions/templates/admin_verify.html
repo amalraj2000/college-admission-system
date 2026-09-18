@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Application{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Applicant Details: {{ application.full_name }}</h5>
+                <span class="badge 
+                    {% if application.status == 'Pending' %}bg-warning
+                    {% elif application.status == 'Documents Verified' %}bg-info
+                    {% elif application.status == 'Merit Approved' %}bg-primary
+                    {% elif application.status == 'Paid' or application.status == 'Admitted' %}bg-success
+                    {% else %}bg-danger{% endif %}">
+                    {{ application.status }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6>Personal Info</h6>
+                        <p><strong>DOB:</strong> {{ application.dob }}</p>
+                        <p><strong>Address:</strong> {{ application.address }}</p>
+                        <p><strong>Course:</strong> {{ application.course.name }} (Code: {{ application.course.code }})</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Academic Record</h6>
+                        <p><strong>10th %:</strong> {{ application.marks_10th }}%</p>
+                        <p><strong>12th %:</strong> <span class="badge bg-secondary text-white fs-6">{{ application.marks_12th }}%</span></p>
+                        <p><strong>Course Cutoff:</strong> {{ application.course.cutoff_marks }}%</p>
+                    </div>
+                </div>
+
+                <hr>
+                
+                <h6>Uploaded Documents</h6>
+                {% if application.document %}
+                <div class="row text-center mt-3">
+                    <div class="col-md-3">
+                        <p class="mb-1">Photo</p>
+                        {% if application.document.photo %}
+                        <a href="{{ application.document.photo.url }}" target="_blank" class="btn btn-sm btn-outline-info">View Photo</a>
+                        {% else %}
+                        <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        <p class="mb-1">Signature</p>
+                        {% if application.document.signature %}
+                        <a href="{{ application.document.signature.url }}" target="_blank" class="btn btn-sm btn-outline-info">View Sign</a>
+                        {% else %}
+                        <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        <p class="mb-1">10th Marksheet</p>
+                        {% if application.document.marksheet_10th %}
+                        <a href="{{ application.document.marksheet_10th.url }}" target="_blank" class="btn btn-sm btn-outline-info">View 10th</a>
+                        {% else %}
+                        <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-3">
+                        <p class="mb-1">12th Marksheet</p>
+                        {% if application.document.marksheet_12th %}
+                        <a href="{{ application.document.marksheet_12th.url }}" target="_blank" class="btn btn-sm btn-outline-info">View 12th</a>
+                        {% else %}
+                        <span class="text-muted">N/A</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-warning mt-2">Documents not uploaded by student yet.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Action Panel</h5>
+            </div>
+            <div class="card-body">
+                {% if application.status == 'Documents Verified' or application.status == 'Pending' %}
+                <p>Review the details and documents to make a decision.</p>
+                
+                {% if application.marks_12th >= application.course.cutoff_marks %}
+                    <div class="alert alert-success">Student meets cutoff requirement!</div>
+                {% else %}
+                    <div class="alert alert-danger">Student is below cutoff marks!</div>
+                {% endif %}
+
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <button type="submit" name="action" value="approve" class="btn btn-success w-100 mb-2">Approve Application</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger w-100">Reject Application</button>
+                </form>
+                {% else %}
+                <div class="alert alert-info">
+                    Application is currently marked as <strong>{{ application.status }}</strong>. Further actions are disabled.
+                </div>
+                {% endif %}
+                <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary w-100 mt-3">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
