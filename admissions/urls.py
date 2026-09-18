@@ -7,8 +7,10 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     
+    # Public Flow
+    path('', views.landing_page, name='landing_page'),
+
     # Student Flow
-    path('', views.student_dashboard, name='student_dashboard'), # Default route for students
     path('dashboard/', views.student_dashboard, name='student_dashboard'),
     path('apply/', views.apply, name='apply'),
     path('upload-documents/', views.upload_documents, name='upload_documents'),

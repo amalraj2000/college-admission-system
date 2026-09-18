@@ -7,6 +7,9 @@ from django.db.models import Count
 from .models import UserProfile, Course, ApplicationForm, Document, Payment
 from .forms import UserRegistrationForm, StudentApplicationForm, DocumentUploadForm, CourseForm
 
+def landing_page(request):
+    return render(request, 'landing_page.html')
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
